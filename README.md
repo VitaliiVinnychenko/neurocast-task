@@ -25,16 +25,16 @@ git clone https://github.com/VitaliiVinnychenko/neurocast-task.git neurocast-tas
 cd neurocast-task
 ```
 
-#### Using Docker
+### Using Docker
 
 ```bash
 # Build & Create Docker Containers
 docker-compose up -d
 ```
 
-### Frontend
+### Using Local Environment
 
-#### Using Local Environment
+#### Frontend
 
 ```bash
 # Install dependencies
@@ -44,9 +44,7 @@ npm install
 npm start
 ```
 
-### Backend
-
-#### Using Local Environment
+#### Backend
 
 ```bash
 # Copy Example Env file
