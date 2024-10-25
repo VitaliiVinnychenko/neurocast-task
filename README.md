@@ -12,7 +12,6 @@ Prerequisites
 _If you are not using Docker, you should also have:_
 
 - MongoDB
-- Redis 6.2.X
 
 Getting Started
 ---------------
