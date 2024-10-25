@@ -7,7 +7,6 @@ import (
 	"github.com/gin-gonic/gin/binding"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"net/http"
-	"strconv"
 )
 
 // CreateNewNote godoc
@@ -45,11 +44,10 @@ func CreateNewNote(c *gin.Context) {
 
 // GetNotes godoc
 // @Summary      Get Notes
-// @Description  gets user notes with pagination
+// @Description  gets all notes
 // @Tags         notes
 // @Accept       json
 // @Produce      json
-// @Param        page  query    string  false  "Switch page by 'page'"
 // @Success      200  {object}  models.Response
 // @Failure      400  {object}  models.Response
 // @Router       /notes [get]
@@ -60,21 +58,11 @@ func GetNotes(c *gin.Context) {
 		Success:    false,
 	}
 
-	pageQuery := c.DefaultQuery("page", "0")
-	page, _ := strconv.Atoi(pageQuery)
-	limit := 5
-
-	notes, _ := services.GetNotes(page, limit)
-	hasPrev := page > 0
-	hasNext := len(notes) > limit
-
-	if hasNext {
-		notes = notes[:limit]
-	}
+	notes, _ := services.GetNotes()
 
 	response.StatusCode = http.StatusOK
 	response.Success = true
-	response.Data = gin.H{"notes": notes, "prev": hasPrev, "next": hasNext}
+	response.Data = gin.H{"notes": notes}
 	response.SendResponse(c)
 }
 

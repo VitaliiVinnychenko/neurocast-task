@@ -1,70 +1,62 @@
-// Notes.js
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import './styles.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faTrash, faSave } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faTrash, faSave, faCancel } from '@fortawesome/free-solid-svg-icons';
+import api from '../../services/api';
 
 function Notes() {
   const [notes, setNotes] = useState([]);
   const [newNote, setNewNote] = useState('');
   const [newTitle, setNewTitle] = useState('');
-  const [newDate, setNewDate] = useState('');
-  const [searchTerm, setSearchTerm] = useState('');
   const [editMode, setEditMode] = useState(null);
   const [editedContent, setEditedContent] = useState('');
+  const [editedTitle, setEditedTitle] = useState('');
 
   useEffect(() => {
-    axios.get('http://localhost:8080/v1/notes').then((response) => {
-      setNotes(response.data);
-    });
+    api.get('/notes').then((response) => {
+      setNotes(response.data.data.notes);
+    })
+    .catch(error => console.log(error));
   }, []);
 
   const addNote = () => {
-    axios
-      .post('http://localhost:8080/v1/notes', {
+    api
+      .post('/notes', {
         title: newTitle,
         content: newNote,
-        date: newDate,
       })
       .then((response) => {
-        setNotes([...notes, response.data]);
+        setNotes([...notes, response.data.data.note]);
         setNewTitle('');
         setNewNote('');
-        setNewDate('');
-      });
+      })
+      .catch(error => console.log(error));
   };
 
   const deleteNote = (id) => {
-    axios.delete(`http://localhost:8080/v1/notes/${id}`).then(() => {
+    api.delete(`/notes/${id}`).then(() => {
       const updatedNotes = notes.filter((note) => note.id !== id);
       setNotes(updatedNotes);
-    });
+    })
+    .catch(error => console.log(error));
   };
 
   const updateNote = (id) => {
-    axios
-      .put(`http://localhost:8080/v1/notes/${id}`, { content: editedContent })
+    api
+      .put(`/notes/${id}`, { 
+        content: editedContent, 
+        title: editedTitle 
+      })
       .then(() => {
         const updatedNotes = [...notes];
         const noteIndex = updatedNotes.findIndex((note) => note.id === id);
+        updatedNotes[noteIndex].title = editedTitle;
         updatedNotes[noteIndex].content = editedContent;
         setNotes(updatedNotes);
         setEditMode(null);
-      });
+      })
+      .catch(error => console.log(error));
   };
-
-
-
-const filteredNotes = searchTerm
-  ? notes.filter((note) =>
-      note.title &&
-      note.title.toLowerCase().includes(searchTerm.toLowerCase())
-    )
-  : notes;
-
-// ...
-
 
   return (
     <div className="notes-container">
@@ -85,33 +77,45 @@ const filteredNotes = searchTerm
         <button onClick={addNote}>Add</button>
       </div>
       <div className="notes-list">
-        {filteredNotes.map((note) => (
+        {notes.map((note) => (
           <div key={note.id} className="note">
             <div className="note-content">
-              <h3>{note.title}</h3>
               {editMode === note.id ? (
                 <div>
+                  <input
+                    type="text"
+                    value={editedTitle}
+                    onChange={(e) => setEditedTitle(e.target.value)}
+                  />
                   <input
                     type="text"
                     value={editedContent}
                     onChange={(e) => setEditedContent(e.target.value)}
                   />
-                  <button onClick={() => updateNote(note.id)}>
+                  <button onClick={() => updateNote(note.id)} title={"Save"}>
                     <FontAwesomeIcon icon={faSave} />
+                  </button>
+                  <button onClick={() => setEditMode(null)} title={"Cancel edit"}>
+                    <FontAwesomeIcon icon={faCancel} />
                   </button>
                 </div>
               ) : (
-                <p>{note.content}</p>
+                <div>
+                  <h3>{note.title}</h3>
+                  <p>{note.content}</p>
+                </div>
               )}
             </div>
             <div className="note-date">{note.date}</div>
             <div className="note-actions">
               {editMode !== note.id ? (
-                <button onClick={() => setEditMode(note.id)}>
-                  <FontAwesomeIcon icon={faEdit} />
-                </button>
+                <div>
+                  <button onClick={() => setEditMode(note.id)}  title={"Edit note"}>
+                    <FontAwesomeIcon icon={faEdit} />
+                  </button>
+                </div>
               ) : null}
-              <button className="delete-button" onClick={() => deleteNote(note.id)}>
+              <button className="delete-button" onClick={() => deleteNote(note.id)}  title={"Delete note"}>
                 <FontAwesomeIcon icon={faTrash} />
               </button>
             </div>

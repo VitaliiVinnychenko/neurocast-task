@@ -29,12 +29,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: gets user notes with pagination
-      parameters:
-      - description: Switch page by 'page'
-        in: query
-        name: page
-        type: string
+      description: gets all notes
       produces:
       - application/json
       responses:

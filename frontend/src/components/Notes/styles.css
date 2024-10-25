@@ -1,4 +1,3 @@
-/* Notes.css */
 .notes-container {
     text-align: center;
     margin: 20px;
@@ -14,7 +13,7 @@
   }
   
   .add-note input[type="text"],
-  .add-note input[type="date"] {
+  .note-content input[type=text] {
     padding: 10px;
     margin-right: 10px;
     border: 1px solid #ccc;
@@ -28,17 +27,6 @@
     padding: 10px 20px;
     cursor: pointer;
     border-radius: 5px;
-  }
-  
-  .search-bar {
-    margin-top: 20px;
-  }
-  
-  .search-bar input[type="text"] {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    width: 300px;
   }
   
   .notes-list {
@@ -62,21 +50,31 @@
   .note:hover {
     transform: translateY(-5px);
   }
+
+  .note-content {
+    display: flex;
+    justify-content: center;
+  }
   
   .note-content h3 {
     font-size: 20px;
     color: #0077b6;
     margin-bottom: 10px;
   }
+
+  .note-content input[type=text] {
+    margin-right: 0;
+    margin-bottom: 15px;
+    display: block;
+  }
   
   .note-content p {
     font-size: 16px;
     color: #333;
   }
-  
-  .note-date {
-    color: #666;
-    margin-top: 10px;
+
+  .note-content button {
+    margin: 0 10px;
   }
   
   button {
@@ -91,11 +89,6 @@
   button:hover {
     background-color: #f54949;
   }
-
-  
-
-  /* Notes.css */
-/* ... Previous CSS styles ... */
 
 .note-actions {
     display: flex;

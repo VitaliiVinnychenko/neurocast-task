@@ -8,7 +8,6 @@ import (
 	"github.com/kamva/mgm/v3/field"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 // CreateNote create new note record
@@ -22,17 +21,13 @@ func CreateNote(title string, content string) (*db.Note, error) {
 	return note, nil
 }
 
-// GetNotes get paginated note list
-func GetNotes(page int, limit int) ([]db.Note, error) {
+// GetNotes get notes list
+func GetNotes() ([]db.Note, error) {
 	var notes []db.Note
-
-	findOptions := options.Find().
-		SetSkip(int64(page * limit)).
-		SetLimit(int64(limit + 1))
 
 	err := mgm.Coll(&db.Note{}).SimpleFind(
 		&notes,
-		findOptions,
+		bson.M{},
 	)
 
 	if err != nil {

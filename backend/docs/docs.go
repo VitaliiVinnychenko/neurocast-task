@@ -23,7 +23,7 @@ const docTemplate = `{
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "gets user notes with pagination",
+                "description": "gets all notes",
                 "consumes": [
                     "application/json"
                 ],
@@ -34,14 +34,6 @@ const docTemplate = `{
                     "notes"
                 ],
                 "summary": "Get Notes",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Switch page by 'page'",
-                        "name": "page",
-                        "in": "query"
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "OK",
