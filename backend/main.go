@@ -24,10 +24,6 @@ func main() {
 	services.LoadConfig()
 	services.InitMongoDB()
 
-	if services.Config.UseRedis {
-		services.CheckRedisConnection()
-	}
-
 	routes.InitGin()
 	router := routes.New()
 

@@ -98,7 +98,7 @@ func GetOneNote(c *gin.Context) {
 	idHex := c.Param("id")
 	noteId, _ := primitive.ObjectIDFromHex(idHex)
 
-	note, err = services.GetNoteById(noteId)
+	note, err := services.GetNoteById(noteId)
 	if err != nil {
 		response.Message = err.Error()
 		response.SendResponse(c)
