@@ -2,7 +2,6 @@ package models
 
 import (
 	"github.com/kamva/mgm/v3"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type Note struct {

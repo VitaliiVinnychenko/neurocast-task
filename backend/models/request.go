@@ -1,10 +1,6 @@
 package models
 
-import (
-	validation "github.com/go-ozzo/ozzo-validation"
-	"github.com/go-ozzo/ozzo-validation/is"
-	"regexp"
-)
+import validation "github.com/go-ozzo/ozzo-validation"
 
 type NoteRequest struct {
 	Title   string `json:"title"`

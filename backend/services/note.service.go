@@ -12,8 +12,8 @@ import (
 )
 
 // CreateNote create new note record
-func CreateNote(userId primitive.ObjectID, title string, content string) (*db.Note, error) {
-	note := db.NewNote(userId, title, content)
+func CreateNote(title string, content string) (*db.Note, error) {
+	note := db.NewNote(title, content)
 	err := mgm.Coll(note).Create(note)
 	if err != nil {
 		return nil, errors.New("cannot create new note")
@@ -23,7 +23,7 @@ func CreateNote(userId primitive.ObjectID, title string, content string) (*db.No
 }
 
 // GetNotes get paginated note list
-func GetNotes(userId primitive.ObjectID, page int, limit int) ([]db.Note, error) {
+func GetNotes(page int, limit int) ([]db.Note, error) {
 	var notes []db.Note
 
 	findOptions := options.Find().
@@ -32,7 +32,6 @@ func GetNotes(userId primitive.ObjectID, page int, limit int) ([]db.Note, error)
 
 	err := mgm.Coll(&db.Note{}).SimpleFind(
 		&notes,
-		bson.M{"author": userId},
 		findOptions,
 	)
 
@@ -43,9 +42,9 @@ func GetNotes(userId primitive.ObjectID, page int, limit int) ([]db.Note, error)
 	return notes, nil
 }
 
-func GetNoteById(userId primitive.ObjectID, noteId primitive.ObjectID) (*db.Note, error) {
+func GetNoteById(noteId primitive.ObjectID) (*db.Note, error) {
 	note := &db.Note{}
-	err := mgm.Coll(note).First(bson.M{field.ID: noteId, "author": userId}, note)
+	err := mgm.Coll(note).First(bson.M{field.ID: noteId}, note)
 	if err != nil {
 		return nil, errors.New("cannot find note")
 	}
@@ -54,15 +53,11 @@ func GetNoteById(userId primitive.ObjectID, noteId primitive.ObjectID) (*db.Note
 }
 
 // UpdateNote updates a note with id
-func UpdateNote(userId primitive.ObjectID, noteId primitive.ObjectID, request *models.NoteRequest) error {
+func UpdateNote(noteId primitive.ObjectID, request *models.NoteRequest) error {
 	note := &db.Note{}
 	err := mgm.Coll(note).FindByID(noteId, note)
 	if err != nil {
 		return errors.New("cannot find note")
-	}
-
-	if note.Author != userId {
-		return errors.New("you cannot update this note")
 	}
 
 	note.Title = request.Title
@@ -77,8 +72,8 @@ func UpdateNote(userId primitive.ObjectID, noteId primitive.ObjectID, request *m
 }
 
 // DeleteNote delete a note with id
-func DeleteNote(userId primitive.ObjectID, noteId primitive.ObjectID) error {
-	deleteResult, err := mgm.Coll(&db.Note{}).DeleteOne(mgm.Ctx(), bson.M{field.ID: noteId, "author": userId})
+func DeleteNote(noteId primitive.ObjectID) error {
+	deleteResult, err := mgm.Coll(&db.Note{}).DeleteOne(mgm.Ctx(), bson.M{field.ID: noteId})
 
 	if err != nil || deleteResult.DeletedCount <= 0 {
 		return errors.New("cannot delete note")

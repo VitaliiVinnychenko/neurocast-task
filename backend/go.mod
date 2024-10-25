@@ -1,8 +1,9 @@
-module github.com/VitaliiVinnychenko/neurocast-task
+module github.com/VitaliiVinnychenko/neurocast-task/backend
 
 go 1.20
 
 require (
+	github.com/ebubekiryigit/golang-mongodb-rest-api-starter v1.0.0
 	github.com/gin-gonic/gin v1.9.1
 	github.com/go-ozzo/ozzo-validation v3.6.0+incompatible
 	github.com/go-redis/cache/v8 v8.4.4

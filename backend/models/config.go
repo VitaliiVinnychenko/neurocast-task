@@ -10,8 +10,6 @@ type EnvConfig struct {
 	ServerAddr                 string `mapstructure:"SERVER_ADDR"`
 	MongodbUri                 string `mapstructure:"MONGO_URI"`
 	MongodbDatabase            string `mapstructure:"MONGO_DATABASE"`
-	UseRedis                   bool   `mapstructure:"USE_REDIS"`
-	RedisDefaultAddr           string `mapstructure:"REDIS_DEFAULT_ADDR"`
 	Mode                       string `mapstructure:"MODE"`
 }
 
@@ -22,9 +20,6 @@ func (config *EnvConfig) Validate() error {
 
 		validation.Field(&config.MongodbUri, validation.Required),
 		validation.Field(&config.MongodbDatabase, validation.Required),
-
-		validation.Field(&config.UseRedis, validation.In(true, false)),
-		validation.Field(&config.RedisDefaultAddr),
 
 		validation.Field(&config.Mode, validation.In("debug", "release")),
 	)

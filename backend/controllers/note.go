@@ -30,14 +30,7 @@ func CreateNewNote(c *gin.Context) {
 		Success:    false,
 	}
 
-	userId, exists := c.Get("userId")
-	if !exists {
-		response.Message = "cannot get user"
-		response.SendResponse(c)
-		return
-	}
-
-	note, err := services.CreateNote(userId.(primitive.ObjectID), requestBody.Title, requestBody.Content)
+	note, err := services.CreateNote(requestBody.Title, requestBody.Content)
 	if err != nil {
 		response.Message = err.Error()
 		response.SendResponse(c)
@@ -67,18 +60,11 @@ func GetNotes(c *gin.Context) {
 		Success:    false,
 	}
 
-	userId, exists := c.Get("userId")
-	if !exists {
-		response.Message = "cannot get user"
-		response.SendResponse(c)
-		return
-	}
-
 	pageQuery := c.DefaultQuery("page", "0")
 	page, _ := strconv.Atoi(pageQuery)
 	limit := 5
 
-	notes, _ := services.GetNotes(userId.(primitive.ObjectID), page, limit)
+	notes, _ := services.GetNotes(page, limit)
 	hasPrev := page > 0
 	hasNext := len(notes) > limit
 
@@ -112,27 +98,12 @@ func GetOneNote(c *gin.Context) {
 	idHex := c.Param("id")
 	noteId, _ := primitive.ObjectIDFromHex(idHex)
 
-	userId, exists := c.Get("userId")
-	if !exists {
-		response.Message = "cannot get user"
-		response.SendResponse(c)
-		return
-	}
-
-	note, err := services.GetNoteFromCache(userId.(primitive.ObjectID), noteId)
-	if err == nil {
-		models.SendResponseData(c, gin.H{"note": note, "cache": true})
-		return
-	}
-
-	note, err = services.GetNoteById(userId.(primitive.ObjectID), noteId)
+	note, err = services.GetNoteById(noteId)
 	if err != nil {
 		response.Message = err.Error()
 		response.SendResponse(c)
 		return
 	}
-
-	go services.CacheOneNote(userId.(primitive.ObjectID), note)
 
 	response.StatusCode = http.StatusOK
 	response.Success = true
@@ -161,17 +132,10 @@ func UpdateNote(c *gin.Context) {
 	idHex := c.Param("id")
 	noteId, _ := primitive.ObjectIDFromHex(idHex)
 
-	userId, exists := c.Get("userId")
-	if !exists {
-		response.Message = "cannot get user"
-		response.SendResponse(c)
-		return
-	}
-
 	var noteRequest models.NoteRequest
 	_ = c.ShouldBindBodyWith(&noteRequest, binding.JSON)
 
-	err := services.UpdateNote(userId.(primitive.ObjectID), noteId, &noteRequest)
+	err := services.UpdateNote(noteId, &noteRequest)
 	if err != nil {
 		response.Message = err.Error()
 		response.SendResponse(c)
@@ -203,14 +167,7 @@ func DeleteNote(c *gin.Context) {
 	idHex := c.Param("id")
 	noteId, _ := primitive.ObjectIDFromHex(idHex)
 
-	userId, exists := c.Get("userId")
-	if !exists {
-		response.Message = "cannot get user"
-		response.SendResponse(c)
-		return
-	}
-
-	err := services.DeleteNote(userId.(primitive.ObjectID), noteId)
+	err := services.DeleteNote(noteId)
 	if err != nil {
 		response.Message = err.Error()
 		response.SendResponse(c)
