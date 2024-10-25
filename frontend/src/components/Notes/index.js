@@ -1,7 +1,7 @@
 // Notes.js
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './Notes.css';
+import './styles.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash, faSave } from '@fortawesome/free-solid-svg-icons';
 
@@ -15,14 +15,14 @@ function Notes() {
   const [editedContent, setEditedContent] = useState('');
 
   useEffect(() => {
-    axios.get('http://localhost:5000/notes').then((response) => {
+    axios.get('http://localhost:8080/v1/notes').then((response) => {
       setNotes(response.data);
     });
   }, []);
 
   const addNote = () => {
     axios
-      .post('http://localhost:5000/notes', {
+      .post('http://localhost:8080/v1/notes', {
         title: newTitle,
         content: newNote,
         date: newDate,
@@ -36,7 +36,7 @@ function Notes() {
   };
 
   const deleteNote = (id) => {
-    axios.delete(`http://localhost:5000/notes/${id}`).then(() => {
+    axios.delete(`http://localhost:8080/v1/notes/${id}`).then(() => {
       const updatedNotes = notes.filter((note) => note.id !== id);
       setNotes(updatedNotes);
     });
@@ -44,7 +44,7 @@ function Notes() {
 
   const updateNote = (id) => {
     axios
-      .put(`http://localhost:5000/notes/${id}`, { content: editedContent })
+      .put(`http://localhost:8080/v1/notes/${id}`, { content: editedContent })
       .then(() => {
         const updatedNotes = [...notes];
         const noteIndex = updatedNotes.findIndex((note) => note.id === id);
@@ -82,20 +82,7 @@ const filteredNotes = searchTerm
           value={newNote}
           onChange={(e) => setNewNote(e.target.value)}
         />
-        <input
-          type="date"
-          value={newDate}
-          onChange={(e) => setNewDate(e.target.value)}
-        />
         <button onClick={addNote}>Add</button>
-      </div>
-      <div className="search-bar">
-        <input
-          type="text"
-          placeholder="Search by title..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
       </div>
       <div className="notes-list">
         {filteredNotes.map((note) => (

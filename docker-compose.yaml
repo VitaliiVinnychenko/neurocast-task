@@ -17,15 +17,15 @@ services:
     networks:
       - backend
 
-  # frontend:
-  #   restart: always
-  #   build: ./frontend
-  #   volumes:
-  #     - './frontend:/usr/src/app'
-  #   ports:
-  #     - '3000:3000'
-  #   environment:
-  #     - NODE_ENV=development
+  frontend:
+    restart: always
+    build: ./frontend
+    volumes:
+      - './frontend:/usr/src/app'
+    ports:
+      - '3000:3000'
+    environment:
+      - NODE_ENV=development
 
   mongo:
     image: mongo

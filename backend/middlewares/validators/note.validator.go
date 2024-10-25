@@ -1,7 +1,7 @@
 package validators
 
 import (
-	"github.com/ebubekiryigit/golang-mongodb-rest-api-starter/models"
+	"github.com/VitaliiVinnychenko/neurocast-task/backend/models"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	validation "github.com/go-ozzo/ozzo-validation"

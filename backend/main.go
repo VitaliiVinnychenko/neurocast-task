@@ -13,7 +13,7 @@ import (
 
 // @title GoLang Rest API Notes
 // @version 1.0
-// @description GoLang - Gin - RESTful - MongoDB - Redis
+// @description GoLang - Gin - RESTful - MongoDB
 // @termsOfService https://swagger.io/terms/
 
 // @host localhost:8080

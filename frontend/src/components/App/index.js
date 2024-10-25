@@ -1,8 +1,8 @@
 
 // src/App.js
 import React from 'react';
-import Notes from './Notes';
-import './App.css';
+import Notes from '../Notes';
+import './styles.css';
 
 function App() {
   return (
